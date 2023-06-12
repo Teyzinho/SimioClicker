@@ -1,117 +1,111 @@
-import React, { useState, useEffect } from 'react';
-import bananaImg from "../assets/banana.png"
-import "./Banana.css"
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { increment,incrementClickPower } from "../state/counter";
-import { useAppSelector } from "../hooks"
-import mouseUpgradesData from "../upgrades/upgradesData"
+import { increment } from '../state/counter';
+import { useAppSelector } from '../hooks';
+import bananaImg from '../assets/banana.png';
+import './Banana.css';
 
+interface Upgrade {
+  id: number;
+  name: string;
+  cost: number;
+  clickMultiplier: number;
+  productionMultiplier: number;
+}
 
+class BananaClicker {
+  public Bananas: number;
+  public upgrades: Upgrade[];
+  private dispatch: Function;
+
+  constructor(dispatch: Function, count: number) {
+    this.Bananas = count;
+    this.upgrades = [];
+    this.dispatch = dispatch;
+  }
+
+  clickBanana() {
+    this.updateBananasDisplay();
+    console.log(this.Bananas);
+  }
+
+  acquireUpgrade(upgrade: Upgrade): void {
+    if (this.Bananas >= upgrade.cost && !this.hasUpgrade(upgrade)) {
+      this.Bananas -= upgrade.cost;
+      this.upgrades.push(upgrade);
+      this.updateBananasDisplay();
+      this.updateUpgradesDisplay();
+      this.applyUpgrade(upgrade);
+    }
+  }
+
+  hasUpgrade(upgrade: Upgrade): boolean {
+    return this.upgrades.some((u) => u.id === upgrade.id);
+  }
+
+  applyUpgrade(upgrade: Upgrade): void {
+    // Implemente a lógica do upgrade aqui, como aumentar a produção de Bananas por clique ou por segundo.
+  }
+
+  updateBananasDisplay() {
+    // Utilize o dispatch para atualizar o contador no Redux
+    this.dispatch(increment());
+  }
+
+  updateUpgradesDisplay(): void {
+    // Atualize a exibição do número de upgrades adquiridos na interface do usuário.
+  }
+}
 
 const Banana = () => {
-    const count = useAppSelector(state => state.counter.value);
-    const dispatch = useDispatch();
+  const dispatch = useDispatch();
+  const count = useAppSelector((state) => state.counter.value);
+  const [qtdeBanana, setQtdeBanana] = useState(1);
 
-    interface UpgradeData {
-        key: string;
-        name: string;
-        image: string;
-        cost: number;
-        clickMultiplier: number;
-        productionMultiplier: number;
-        prerequisites: string[];
-    }
-    class Upgrade {
-        key
-        name
-        image
-        cost
-        clickMultiplier
-        productionMultiplier
-        prerequisites
-        active
+  // Crie uma instância do BananaClicker passando o dispatch como argumento
+  const game = new BananaClicker(dispatch, count);
 
-        constructor(data: UpgradeData) {
-            this.key = data.key;
-            this.name = data.name;
-            this.image = data.image;
-            this.cost = data.cost;
-            this.clickMultiplier = data.clickMultiplier;
-            this.productionMultiplier = data.clickMultiplier;
-            this.prerequisites = data.prerequisites;
-            this.active = false;
-        }
-    }
-    class BananaClass {
-        numClick
-        powerClick
-        constructor(numClick: number, powerClick: number) {
-            this.numClick = numClick;
-            this.powerClick = powerClick;
-        }
-        click = () => {
-            dispatch(increment())
-        }
-    }
+  const upgrades: Upgrade[] = [
+    {
+      id: 1,
+      name: 'Click Upgrade 1',
+      cost: 10,
+      clickMultiplier: 2,
+      productionMultiplier: 1,
+    },
+    {
+      id: 2,
+      name: 'Production Upgrade 1',
+      cost: 50,
+      clickMultiplier: 1,
+      productionMultiplier: 2,
+    },
+    // Adicione mais upgrades conforme necessário
+  ];
 
-    const handleUpgradeClick = (upgrade: Upgrade) => {
-        // Implementar a lógica para ativar o upgrade aqui
-        console.log(`Clicou no upgrade: ${upgrade.name}`);
-        if(!upgrade.active){
-            upgrade.active = !upgrade.active
-            console.log(upgrade.active)
-            dispatch(incrementClickPower(upgrade.clickMultiplier))
-        }
-    };
+  const handleUpgradeClick = (upgrade: Upgrade) => {
+    game.acquireUpgrade(upgrade);
+  };
 
-    const banana = new BananaClass(0, 1)
-    const mouseUpgrades: Upgrade[] = mouseUpgradesData.map((update) => new Upgrade(update));
-    console.log(mouseUpgrades)
+  return (
+    <div className="banana-container">
+      <img src={bananaImg} alt="banana" />
 
-    const [enabledUpgrades, setEnabledUpgrades] = useState<string[]>([]);
+      <button onClick={() => game.clickBanana()}>Quantidade {count}</button>
 
-    useEffect(() => {
-        const checkPrerequisites = (upgrade: Upgrade): boolean => {
-            for (const prerequisite of upgrade.prerequisites) {
-                if (!enabledUpgrades.includes(prerequisite)) {
-                    return false;
-                }
-            }
-            return true;
-        };
-
-        const enabledUpgradeKeys: string[] = [];
-
-        for (const upgrade of mouseUpgrades) {
-            if (checkPrerequisites(upgrade)) {
-                enabledUpgradeKeys.push(upgrade.key);
-            }
-        }
-
-        setEnabledUpgrades(enabledUpgradeKeys);
-    }, [enabledUpgrades]);
-
-    return (
-        <div className="banana-container">
-            <img src={bananaImg} alt="banana" />
-
-            <button onClick={banana.click}>
-                Increment Banana {count}
-            </button>
-
-            <div className="upgrades-container">
-                {mouseUpgrades.map((upgrade) => (
-                    <button
-                        key={upgrade.key}
-                        onClick={() => handleUpgradeClick(upgrade)}
-                        disabled={!enabledUpgrades.includes(upgrade.key)}>
-                    
-                        {upgrade.name}
-                    </button>
-                ))}
-            </div>
-        </div>
-    )
-}
+      <div className="upgrades-container">
+        {upgrades.map((upgrade) => (
+          <button
+            key={upgrade.id}
+            onClick={() => handleUpgradeClick(upgrade)}
+            disabled={game.hasUpgrade(upgrade)}
+          >
+            {upgrade.name} - Cost: {upgrade.cost}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+};
 
 export default Banana;
