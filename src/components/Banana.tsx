@@ -1,9 +1,12 @@
+import React, { useState, useEffect } from 'react';
 import bananaImg from "../assets/banana.png"
 import "./Banana.css"
 import { useDispatch } from 'react-redux';
-import { increment } from "../state/counter";
+import { increment,incrementClickPower } from "../state/counter";
 import { useAppSelector } from "../hooks"
 import mouseUpgradesData from "../upgrades/upgradesData"
+
+
 
 const Banana = () => {
     const count = useAppSelector(state => state.counter.value);
@@ -47,18 +50,46 @@ const Banana = () => {
             this.powerClick = powerClick;
         }
         click = () => {
-            dispatch(increment(this.powerClick))
+            dispatch(increment())
         }
     }
 
     const handleUpgradeClick = (upgrade: Upgrade) => {
         // Implementar a lógica para ativar o upgrade aqui
         console.log(`Clicou no upgrade: ${upgrade.name}`);
+        if(!upgrade.active){
+            upgrade.active = !upgrade.active
+            console.log(upgrade.active)
+            dispatch(incrementClickPower(upgrade.clickMultiplier))
+        }
     };
 
     const banana = new BananaClass(0, 1)
     const mouseUpgrades: Upgrade[] = mouseUpgradesData.map((update) => new Upgrade(update));
     console.log(mouseUpgrades)
+
+    const [enabledUpgrades, setEnabledUpgrades] = useState<string[]>([]);
+
+    useEffect(() => {
+        const checkPrerequisites = (upgrade: Upgrade): boolean => {
+            for (const prerequisite of upgrade.prerequisites) {
+                if (!enabledUpgrades.includes(prerequisite)) {
+                    return false;
+                }
+            }
+            return true;
+        };
+
+        const enabledUpgradeKeys: string[] = [];
+
+        for (const upgrade of mouseUpgrades) {
+            if (checkPrerequisites(upgrade)) {
+                enabledUpgradeKeys.push(upgrade.key);
+            }
+        }
+
+        setEnabledUpgrades(enabledUpgradeKeys);
+    }, [enabledUpgrades]);
 
     return (
         <div className="banana-container">
@@ -73,8 +104,8 @@ const Banana = () => {
                     <button
                         key={upgrade.key}
                         onClick={() => handleUpgradeClick(upgrade)}
-                    /*disabled={ Adicione a lógica de desabilitar o botão com base nas pré-requisitos e condições }*/
-                    >
+                        disabled={!enabledUpgrades.includes(upgrade.key)}>
+                    
                         {upgrade.name}
                     </button>
                 ))}
