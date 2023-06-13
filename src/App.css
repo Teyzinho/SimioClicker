@@ -1,5 +1,7 @@
 .App{
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
+    display: grid;
+    /* justify-content: space-around;
+    align-items: center; */
+    grid-template-columns: 25% 1fr 1fr;
+    column-gap: 50px;
 }

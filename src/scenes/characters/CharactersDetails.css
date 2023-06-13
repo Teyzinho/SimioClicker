@@ -1,0 +1,21 @@
+.character-container{
+    /* background-color: #00547F; */
+    min-height: 100vh;
+    width: 100%;
+    color: white;
+    /* background-image: url(../assets/bg.jpg); */
+    background-image: url(../../assets/bgMonkey.jpg);
+    background-size: cover;
+    background-position: center;
+    border-right: 5px solid white;
+    backdrop-filter: brightness(0.7);
+}
+
+.character-header{
+    width: 100%;
+    text-align: center;
+}
+
+.character-header h1{
+    margin: auto;
+}

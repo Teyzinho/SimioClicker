@@ -9,16 +9,18 @@ import {
 const Banana = () => {
   const dispatch = useDispatch();
   const count = useAppSelector((state) => state.counter.value);
-  const upgradeId = useAppSelector((state) => state.counter.upgrades);
+  // const upgradeId = useAppSelector((state) => state.counter.upgrades);
 
   function handleCLick() {
     dispatch(increment());
   }
 
   return (
-    <div className="banana-container">
-      <img src={bananaImg} alt="banana" />
-      <button onClick={() => handleCLick()}>Quantidade {count}</button>
+    <div className="banana-container" >
+      <div onClick={() => handleCLick()}>
+        <img src={bananaImg} alt="banana" />
+      </div>
+      <span><h2>Quantidade {count} </h2></span>
     </div>
   );
 };

@@ -1,7 +1,8 @@
 import './App.css';
 import Banana from "./components/banana/Banana";
-import CharactersDetails from "./scenes/CharactersDetails";
-import UpgradesDetails from './scenes/UpgradesDetails';
+import CharactersDetails from "./scenes/characters/CharactersDetails";
+import UpgradesDetails from './scenes/upgrade/UpgradesDetails';
+import AddPerSecond from './components/addPerSecond/AddPerSecond';
 
 function App() {
 

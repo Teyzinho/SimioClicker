@@ -1,4 +1,19 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed&display=swap');
+
 body{
   margin:0;
   padding: 0;
+  font-family: 'Roboto Condensed', sans-serif;
+  /* background-image: url(assets/background-azul-amarelo.avif); */
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  color: white;
+
+  /* background-color: #00547F; //blue
+  #007FBF //blue
+  #F2B705 //yellow
+  #0C0C0D//black
+  color: white; */
 }

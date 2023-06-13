@@ -1,12 +1,15 @@
 import { useDispatch } from 'react-redux';
-import { useAppSelector } from '../hooks';
+import { useAppSelector } from '../../hooks';
 import {
     reduce,
     incrementClickPower,
-    incrementUpgrades
-} from '../state/counterSlice';
-import { Upgrade } from '../data/upgrades/upgradesData';
-import { upgrades } from '../data/upgrades/upgradesData';
+    incrementUpgrades,
+    incrementClickPerSecond
+} from '../../state/counterSlice';
+import { Upgrade } from '../../data/upgrades/upgradesData';
+import { upgrades } from '../../data/upgrades/upgradesData';
+import "./UpgradesDetails.css"
+import SimioContainer from '../../components/simioContainer/SiomioContainer';
 
 
 const UpgradesDetails = () => {
@@ -34,13 +37,15 @@ const UpgradesDetails = () => {
 
     function applyUpgrade(upgrade: Upgrade): void {
         dispatch(incrementClickPower(upgrade.clickMultiplier))
+        dispatch(incrementClickPerSecond(upgrade.productionMultiplier))
     }
 
     function updateUpgradesDisplay(): void {
     }
 
     return (
-        <div>
+        <div className='upgradesContainer'>
+
             <div className="upgrades-container">
                 {upgrades.map((upgrade) => (
                     <button
@@ -52,6 +57,9 @@ const UpgradesDetails = () => {
                     </button>
                 ))}
             </div>
+
+            <SimioContainer/>
+            
         </div>
     )
 }

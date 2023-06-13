@@ -1,6 +1,5 @@
 import "./character.css"
-// import React from "react";
-// import { CharacterInterface } from "../../data/characters/charactersData"
+import babananaImg from "../../assets/bananaIcon.png"
 import { useDispatch } from "react-redux"
 import {
     incrementClickPerSecond,
@@ -14,7 +13,6 @@ const Character = ({ character }) => {
     const count = useAppSelector((state) => state.counter.value);
     const charactersAmount = useAppSelector((state) => state.counter.characters);
     const characterData = charactersAmount.find((char) => char.id === character.id);
-    console.log(characterData)
 
     function handelClick(character) {
         if (count >= character.cost) {
@@ -25,13 +23,30 @@ const Character = ({ character }) => {
     }
 
     return (
-        <div className="character" onClick={() => handelClick(character)}>
-            <img src={character.imagePath} alt="" />
+        <div className={`character ${count >= character.cost ? "" : "character-locked"}`}
+            onClick={() => handelClick(characterData)}
+        >
+            <img className="monkeyImg" src={character.imagePath} alt="" />
             <div className="character-details">
-                <p>{character.name}</p>
-                <p>R${character.cost}</p>
-                <p>Production: {character.productionAddition}</p>
-                <p>Quantidade : {characterData ? characterData.amount : 0} </p>
+                <div>
+                    <h3>{character.name}</h3>
+                    <span className="cost"
+                        style={{
+                            color: count >= character.cost ? "#6f6" : "#f66",
+
+                        }}
+                    >
+                        <img src={babananaImg} alt="banana" />
+                        {characterData.cost}
+                    </span>
+                    <p>Bps: {character.productionAddition}</p>
+
+                </div>
+
+                <div className="quantidade">
+                    {characterData ? characterData.amount : 0}
+                </div>
+
             </div>
         </div>
     )

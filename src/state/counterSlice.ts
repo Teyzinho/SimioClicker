@@ -1,21 +1,19 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { characterData, CharacterInterface } from "../data/characters/charactersData"
 interface CounterState {
   value: number;
   clickPower: number;
-  clickPerSecond: number;
+  addPerSecond: number;
   upgrades: (string | number)[];
-  characters: {
-    id: string;
-    amount: number;
-  }[];
+  characters: CharacterInterface[];
 }
 
 const initialState: CounterState = {
   value: 0,
   clickPower: 1,
-  clickPerSecond: 0,
+  addPerSecond: 0,
   upgrades: [],
-  characters: [],
+  characters: characterData
 };
 
 export const counterSlice = createSlice({
@@ -24,6 +22,9 @@ export const counterSlice = createSlice({
   reducers: {
     increment: (state) => {
       state.value += state.clickPower;
+    },
+    addPerSecont:(state) => {
+      state.value += state.addPerSecond
     },
     reduce: (state, action: PayloadAction<number>) => {
       state.value -= action.payload;
@@ -35,18 +36,15 @@ export const counterSlice = createSlice({
       state.upgrades.push(action.payload);
     },
     incrementClickPerSecond: (state , action:PayloadAction<number>)=>{
-      state.clickPerSecond += action.payload;
+      state.addPerSecond += action.payload;
     },
     incrementCharacters: (state, action: PayloadAction<{ id: string }>) => {
       const { id } = action.payload;
-      const amount = 1;
-      const existingCharacter = state.characters.find((character) => character.id === id);
-      console.log(existingCharacter)
+      const Character = state.characters.find((character) => character.id === id);
     
-      if (existingCharacter) {
-        existingCharacter.amount += 1;
-      } else {
-        state.characters.push({ id, amount });
+      if (Character) {
+        Character.amount += 1;
+        Character.cost += 2
       }
     }
   },
@@ -58,7 +56,8 @@ export const {
   reduce,
   incrementUpgrades,
   incrementClickPerSecond,
-  incrementCharacters
+  incrementCharacters,
+  addPerSecont
 } = counterSlice.actions;
 
 export const counterReducer = counterSlice.reducer;
