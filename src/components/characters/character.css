@@ -1,0 +1,16 @@
+.character{
+    width: 300px;
+    height: 125px;
+    display: flex;
+    padding: 10px;
+    align-items: center;
+    gap: 5px;
+    background-color: rgba(0, 0, 0, 0.404);
+    cursor: pointer;
+}
+
+.character img{
+    width: 100px;
+    height: 100%;
+    object-fit: cover;
+}

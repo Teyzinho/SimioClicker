@@ -8,7 +8,10 @@ function App() {
   return (
     <div className='App'>
       <CharactersDetails />
-      <Banana />
+      <div>
+        <AddPerSecond />
+        <Banana />
+      </div>
       <UpgradesDetails />
     </div>
   )

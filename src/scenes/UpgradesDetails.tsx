@@ -5,8 +5,8 @@ import {
     incrementClickPower,
     incrementUpgrades
 } from '../state/counterSlice';
-import { Upgrade } from '../upgrades/upgradesData';
-import { upgrades } from '../upgrades/upgradesData';
+import { Upgrade } from '../data/upgrades/upgradesData';
+import { upgrades } from '../data/upgrades/upgradesData';
 
 
 const UpgradesDetails = () => {
