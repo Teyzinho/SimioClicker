@@ -1,12 +1,16 @@
-import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { increment } from '../state/counter';
 import { useAppSelector } from '../hooks';
 import bananaImg from '../assets/banana.png';
 import './Banana.css';
+import {
+  increment,
+  reduce,
+  incrementClickPower,
+  incrementUpgrades
+} from '../state/counter';
 
 interface Upgrade {
-  id: number;
+  id: number | string;
   name: string;
   cost: number;
   clickMultiplier: number;
@@ -14,60 +18,65 @@ interface Upgrade {
 }
 
 class BananaClicker {
-  public Bananas: number;
-  public upgrades: Upgrade[];
-  private dispatch: Function;
+  public Bananas
+  public upgrades
+  public dispatch
 
-  constructor(dispatch: Function, count: number) {
+  constructor(dispatch: Function, count: number, upgradeId:any) {
     this.Bananas = count;
-    this.upgrades = [];
+    this.upgrades = upgradeId;
     this.dispatch = dispatch;
+    console.log("stateUpdates",upgradeId)
   }
 
   clickBanana() {
-    this.updateBananasDisplay();
+    this.dispatch(increment());
     console.log(this.Bananas);
+    console.log("upgrades:", this.upgrades)
+
   }
 
   acquireUpgrade(upgrade: Upgrade): void {
     if (this.Bananas >= upgrade.cost && !this.hasUpgrade(upgrade)) {
-      this.Bananas -= upgrade.cost;
-      this.upgrades.push(upgrade);
-      this.updateBananasDisplay();
+      // this.Bananas -= upgrade.cost;
+      this.reduce(upgrade.cost) //Reduz a quantidade de bananas
+
+      this.dispatch(incrementUpgrades(upgrade));
+
       this.updateUpgradesDisplay();
       this.applyUpgrade(upgrade);
     }
   }
 
+  reduce(price: number) {
+    this.dispatch(reduce(price))
+  }
+
   hasUpgrade(upgrade: Upgrade): boolean {
-    return this.upgrades.some((u) => u.id === upgrade.id);
+    return this.upgrades.some((u:any) => u.id === upgrade.id);
   }
 
   applyUpgrade(upgrade: Upgrade): void {
     // Implemente a lógica do upgrade aqui, como aumentar a produção de Bananas por clique ou por segundo.
+    this.dispatch(incrementClickPower(upgrade.clickMultiplier))
   }
 
-  updateBananasDisplay() {
-    // Utilize o dispatch para atualizar o contador no Redux
-    this.dispatch(increment());
-  }
 
   updateUpgradesDisplay(): void {
     // Atualize a exibição do número de upgrades adquiridos na interface do usuário.
   }
 }
-
 const Banana = () => {
   const dispatch = useDispatch();
   const count = useAppSelector((state) => state.counter.value);
-  const [qtdeBanana, setQtdeBanana] = useState(1);
+  const upgradeId = useAppSelector((state) => state.counter.upgrades);
 
   // Crie uma instância do BananaClicker passando o dispatch como argumento
-  const game = new BananaClicker(dispatch, count);
+  const game = new BananaClicker(dispatch, count, upgradeId);
 
   const upgrades: Upgrade[] = [
     {
-      id: 1,
+      id: "clickup1",
       name: 'Click Upgrade 1',
       cost: 10,
       clickMultiplier: 2,
