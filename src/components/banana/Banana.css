@@ -1,0 +1,8 @@
+.banana-container img{
+    cursor: pointer;
+}
+
+.banana-container{
+    display: flex;
+    flex-direction: column;
+}

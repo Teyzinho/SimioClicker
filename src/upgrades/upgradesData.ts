@@ -1,41 +1,25 @@
-interface Update {
-    key: string;
+export interface Upgrade {
+    id: number | string;
     name: string;
-    image: string;
     cost: number;
     clickMultiplier: number;
     productionMultiplier: number;
-    prerequisites: string[];
-}
+  }
 
-const mouseUpgradesData: Update[] = [
+  export const upgrades: Upgrade[] = [
     {
-        key: 'upgrade1',
-        name: 'Upgrade 1',
-        image: '',
-        cost: 2,
-        clickMultiplier: 1.5,
-        productionMultiplier: 1,
-        prerequisites: []
+      id: "clickup1",
+      name: 'Click Upgrade 1',
+      cost: 10,
+      clickMultiplier: 2,
+      productionMultiplier: 1,
     },
     {
-        key: 'upgrade2',
-        name: 'Upgrade 2',
-        image: '',
-        cost: 3,
-        clickMultiplier: 2,
-        productionMultiplier: 1.2,
-        prerequisites: ['upgrade1']
+      id: 2,
+      name: 'Production Upgrade 1',
+      cost: 50,
+      clickMultiplier: 1,
+      productionMultiplier: 2,
     },
-    {
-        key: 'upgrade3',
-        name: 'Upgrade 3',
-        image: '',
-        cost: 5,
-        clickMultiplier: 3,
-        productionMultiplier: 1.5,
-        prerequisites: ['upgrade1', 'upgrade2']
-    }
-];
-
-export default mouseUpgradesData;
+    // Adicione mais upgrades conforme necessário
+  ];
