@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { characterData, CharacterInterface } from "../data/characters/charactersData"
+
 interface CounterState {
   value: number;
   clickPower: number;
@@ -16,6 +17,14 @@ const initialState: CounterState = {
   characters: characterData
 };
 
+const recalculateAddPerSecond = (state: CounterState) => {
+  const addPerSecond = state.characters.reduce(
+    (total, character) => total + character.productionAddition * character.amount,
+    0
+  );
+  state.addPerSecond = addPerSecond;
+};
+
 export const counterSlice = createSlice({
   name: "counter",
   initialState,
@@ -23,8 +32,8 @@ export const counterSlice = createSlice({
     increment: (state) => {
       state.value += state.clickPower;
     },
-    addPerSecont:(state) => {
-      state.value += state.addPerSecond
+    addPerSecont: (state)=>{
+      state.value += state.addPerSecond;
     },
     reduce: (state, action: PayloadAction<number>) => {
       state.value -= action.payload;
@@ -35,29 +44,26 @@ export const counterSlice = createSlice({
     incrementUpgrades: (state, action: PayloadAction<string | number>) => {
       state.upgrades.push(action.payload);
     },
-    incrementClickPerSecond: (state , action:PayloadAction<number>)=>{
-      state.addPerSecond += action.payload;
-    },
     incrementCharacters: (state, action: PayloadAction<{ id: string }>) => {
       const { id } = action.payload;
-      const Character = state.characters.find((character) => character.id === id);
+      const character = state.characters.find((character) => character.id === id);
     
-      if (Character) {
-        Character.amount += 1;
-        Character.cost += 2
+      if (character) {
+        character.amount += 1;
+        character.cost += 2;
+        recalculateAddPerSecond(state);
       }
-    }
+    },
   },
-})
+});
 
 export const { 
   increment,
   incrementClickPower,
   reduce,
   incrementUpgrades,
-  incrementClickPerSecond,
   incrementCharacters,
-  addPerSecont
+  addPerSecont,
 } = counterSlice.actions;
 
 export const counterReducer = counterSlice.reducer;

@@ -2,7 +2,6 @@ import "./character.css"
 import babananaImg from "../../assets/bananaIcon.png"
 import { useDispatch } from "react-redux"
 import {
-    incrementClickPerSecond,
     reduce,
     incrementCharacters
 } from "../../state/counterSlice"
@@ -16,7 +15,6 @@ const Character = ({ character }) => {
 
     function handelClick(character) {
         if (count >= character.cost) {
-            dispatch(incrementClickPerSecond(character.productionAddition))
             dispatch(reduce(character.cost))
             dispatch(incrementCharacters(character))
         }

@@ -2,6 +2,8 @@ import macacoPregoImg from "../../assets/prego2.png"
 import gibaoCinzaImg from "../../assets/gibao-cinza.avif"
 import chimpanzeImg from "../../assets/Chimpanze.png"
 import micoLeaoDouradoImg from "../../assets/mico-leado-dourado.jpg"
+
+
 export interface CharacterInterface{
     id: number | string;
     name: string;
@@ -9,6 +11,8 @@ export interface CharacterInterface{
     productionAddition: number;
     imagePath: string;
     amount:number;
+    bgPath:string;
+    simioPath:string;
 }
 
 export const characterData: CharacterInterface[]= [
@@ -19,6 +23,8 @@ export const characterData: CharacterInterface[]= [
         productionAddition: 1,
         imagePath: macacoPregoImg,
         amount:0,
+        bgPath: "",
+        simioPath:"",
     },
     {
         id: "macaco2",
@@ -27,6 +33,8 @@ export const characterData: CharacterInterface[]= [
         productionAddition: 2.5,
         imagePath: gibaoCinzaImg,
         amount:0,
+        bgPath: "",
+        simioPath:"",
     },
     {
         id: "macaco3",
@@ -35,6 +43,8 @@ export const characterData: CharacterInterface[]= [
         productionAddition: 5,
         imagePath: chimpanzeImg,
         amount:0,
+        bgPath: "",
+        simioPath:"",
     },
     {
         id: "macaco4",
@@ -43,5 +53,7 @@ export const characterData: CharacterInterface[]= [
         productionAddition: 10,
         imagePath: micoLeaoDouradoImg,
         amount:0,
+        bgPath: "",
+        simioPath:"",
     },
 ]

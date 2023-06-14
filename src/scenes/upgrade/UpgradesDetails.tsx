@@ -4,7 +4,6 @@ import {
     reduce,
     incrementClickPower,
     incrementUpgrades,
-    incrementClickPerSecond
 } from '../../state/counterSlice';
 import { Upgrade } from '../../data/upgrades/upgradesData';
 import { upgrades } from '../../data/upgrades/upgradesData';
@@ -17,6 +16,9 @@ const UpgradesDetails = () => {
     const dispatch = useDispatch();
     const count = useAppSelector((state) => state.counter.value);
     const upgradeId = useAppSelector((state) => state.counter.upgrades);
+    const charactersWithAmount = useAppSelector((state) =>
+        state.counter.characters.filter((character) => character.amount > 0)
+    );
 
     const handleUpgradeClick = (upgrade: Upgrade) => {
         if (count >= upgrade.cost && !hasUpgrade(upgrade)) {
@@ -37,7 +39,6 @@ const UpgradesDetails = () => {
 
     function applyUpgrade(upgrade: Upgrade): void {
         dispatch(incrementClickPower(upgrade.clickMultiplier))
-        dispatch(incrementClickPerSecond(upgrade.productionMultiplier))
     }
 
     function updateUpgradesDisplay(): void {
@@ -58,7 +59,9 @@ const UpgradesDetails = () => {
                 ))}
             </div>
 
-            <SimioContainer/>
+            {charactersWithAmount.map((character) => (
+                <SimioContainer key={character.id} character={character} />
+            ))}
             
         </div>
     )
